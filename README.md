@@ -1,43 +1,43 @@
 # Predator DOOH
 
-Realtime "Predator-style" visual system for DOOH screens: face detection, target tracking, thermal-like color grading, dynamic HUD overlay, and sound effects.
+Реалтайм-система в стиле Predator для DOOH-экранов: детекция лиц, трекинг целей, тепловая цветокоррекция, динамический HUD и звуковые эффекты.
 
-## What It Does
+## Возможности
 
-- Detects faces in live camera stream (`MediaPipe Face Detection`)
-- Tracks multiple targets with lock state machine
-- Renders animated triangular targeting HUD + laser convergence effect
-- Applies cold/warm thermal-like look with optional person segmentation
-- Plays ambient and detection sounds (`pygame`)
-- Supports kiosk/fullscreen behavior on Linux (`wmctrl`, `xdotool`, `xrandr`)
+- Детектирует лица в видеопотоке с камеры (`MediaPipe Face Detection`)
+- Ведет несколько целей с логикой состояний захвата
+- Рисует анимированный треугольный HUD и эффект схождения лазеров
+- Применяет холодно-теплый "термо" стиль с опциональной сегментацией человека
+- Воспроизводит фоновый звук и звук детекции (`pygame`)
+- Поддерживает kiosk/fullscreen режим на Linux (`wmctrl`, `xdotool`, `xrandr`)
 
-## Project Structure
+## Структура проекта
 
 ```text
 .
-|-- winterpredator.py         # main app
-|-- requirements.txt          # Python dependencies
-`-- strekotanie-hischnika.mp3 # sample audio asset
+|-- winterpredator.py         # основной скрипт
+|-- requirements.txt          # Python-зависимости
+`-- strekotanie-hischnika.mp3 # пример аудиофайла
 ```
 
-## Requirements
+## Требования
 
 - Python 3.10+
-- Linux desktop environment (recommended for kiosk mode)
-- USB camera
-- System tools for kiosk mode:
+- Linux desktop (рекомендуется для kiosk-режима)
+- USB-камера
+- Системные утилиты для kiosk-режима:
   - `xrandr`
   - `wmctrl`
   - `xdotool`
 
-Install system packages (Ubuntu/Debian):
+Установка системных пакетов (Ubuntu/Debian):
 
 ```bash
 sudo apt update
 sudo apt install -y python3-venv ffmpeg wmctrl xdotool x11-xserver-utils
 ```
 
-## Quick Start
+## Быстрый старт
 
 ```bash
 python -m venv .venv
@@ -46,25 +46,25 @@ pip install -r requirements.txt
 python winterpredator.py
 ```
 
-Windows note:
-- Core rendering/detection works, but kiosk utilities (`wmctrl`, `xdotool`, `xrandr`) are Linux-specific.
+Примечание для Windows:
+- Основной рендер и детекция работают, но kiosk-утилиты (`wmctrl`, `xdotool`, `xrandr`) Linux-специфичны.
 
-## Configuration (ENV)
+## Конфигурация (ENV)
 
-Available environment variables:
+Доступные переменные окружения:
 
-- `PREDATOR_LOG_DIR` (default: `/var/log/predator`)
-- `DETECT_SHOT_PATH` (default: `/home/predator/predator/short-lasenr.mp3`)
-- `PROMO_PATH` (default: `/home/predator/predator/promo.png`)
-- `PROMO_MODE` (default: `fill_width`)
-- `PROMO_WIDTH_FRAC` (default: `0.90`)
-- `PROMO_WIDTH_PX` (default: `450`)
-- `PROMO_MAX_H_FRAC` (default: `0.90`)
-- `PROMO_OPACITY` (default: `1.0`)
-- `PROMO_BOTTOM` (default: `5`)
-- `PROMO_SIDE` (default: `5`)
+- `PREDATOR_LOG_DIR` (по умолчанию: `/var/log/predator`)
+- `DETECT_SHOT_PATH` (по умолчанию: `/home/predator/predator/short-lasenr.mp3`)
+- `PROMO_PATH` (по умолчанию: `/home/predator/predator/promo.png`)
+- `PROMO_MODE` (по умолчанию: `fill_width`)
+- `PROMO_WIDTH_FRAC` (по умолчанию: `0.90`)
+- `PROMO_WIDTH_PX` (по умолчанию: `450`)
+- `PROMO_MAX_H_FRAC` (по умолчанию: `0.90`)
+- `PROMO_OPACITY` (по умолчанию: `1.0`)
+- `PROMO_BOTTOM` (по умолчанию: `5`)
+- `PROMO_SIDE` (по умолчанию: `5`)
 
-Example:
+Пример:
 
 ```bash
 export PREDATOR_LOG_DIR="$HOME/predator/logs"
@@ -73,30 +73,30 @@ export DETECT_SHOT_PATH="$HOME/predator/assets/shot.mp3"
 python winterpredator.py
 ```
 
-## Audio Notes
+## Звук
 
-- Background music path is currently hardcoded in code:
+- Путь к фоновой музыке сейчас зафиксирован в коде:
   - `/home/predator/predator/predator.mp3`
-- Detection sound supports override via `DETECT_SHOT_PATH`.
+- Звук выстрела/детекции можно переопределить через `DETECT_SHOT_PATH`.
 
-If needed, place your ambient track at the hardcoded path or update `SOUND_FILE` in `winterpredator.py`.
+Если нужно, положите фоновый трек по пути выше или измените `SOUND_FILE` в `winterpredator.py`.
 
-## Runtime Logs
+## Логи
 
-App writes logs to:
+Приложение пишет логи в:
 
-- `$PREDATOR_LOG_DIR/app.log` (or fallback path if no permissions)
+- `$PREDATOR_LOG_DIR/app.log` (или в fallback-путь, если нет прав)
 
-## Troubleshooting
+## Диагностика проблем
 
-- Black screen / no camera:
-  - Check camera index in `winterpredator.py` (`USB_CAMERA_INDEX`)
-  - Test webcam quickly: `python -c "import cv2;print(cv2.VideoCapture(0).isOpened())"`
-- No fullscreen/kiosk behavior:
-  - Ensure `wmctrl`, `xdotool`, `xrandr` are installed and X11 session is active
-- No sound:
-  - Verify audio backend and file paths for ambient/detection sounds
+- Черный экран или нет камеры:
+  - Проверьте индекс камеры в `winterpredator.py` (`USB_CAMERA_INDEX`)
+  - Быстрый тест камеры: `python -c "import cv2;print(cv2.VideoCapture(0).isOpened())"`
+- Не работает fullscreen/kiosk:
+  - Убедитесь, что установлены `wmctrl`, `xdotool`, `xrandr` и активна X11-сессия
+- Нет звука:
+  - Проверьте аудиобэкенд и пути к аудиофайлам
 
-## License
+## Лицензия
 
-No license file is included yet. Add one before public/commercial distribution.
+Файл лицензии пока не добавлен. Перед публичным или коммерческим использованием рекомендуется добавить `LICENSE`.
